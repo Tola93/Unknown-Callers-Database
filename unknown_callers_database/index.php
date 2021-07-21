@@ -1,5 +1,51 @@
 <?php
   include("database_connection.php");
+
+  $errors = array();
+
+  if (isset($_POST['save_call'])) {
+
+    $calling_tele_in = !empty($_POST['calling_tele_in']) ? trim($_POST['calling_tele_in']) : null;
+    $called_tele_in = !empty($_POST['called_tele_in']) ? trim($_POST['called_tele_in']) : null;
+    $call_date_in = !empty($_POST['call_date_in']) ? trim($_POST['call_date_in']) : null;
+    $call_state_in = !empty($_POST['call_state_in']) ? trim($_POST['call_state_in']) : null;
+    $notes_in = !empty($_POST['notes_in']) ? trim($_POST['notes_in']) : null;
+
+    if (empty($calling_tele_in)) { array_push($errors, "calling_tele_in hiba"); }
+    if (empty($called_tele_in)) { array_push($errors, "called_tele_in hiba"); }
+    if (empty($call_date_in)) { array_push($errors, "call_date_in hiba"); }
+    if (empty($call_state_in)) { array_push($errors, "call_state_in hiba"); }
+
+    //$call_date_in = "2020-01-01 00:00:01";
+
+    if (count($errors) == 0) {
+
+      $sql = "SELECT `calling_number_id` FROM `calling_numbers` WHERE `numbers` = :calling_tele_in";
+      $stmt = $db->prepare($sql);
+      $stmt->bindValue(':calling_tele_in', $calling_tele_in);
+      $stmt->execute();
+      $calling_number_id = $stmt->fetchColumn();
+
+      $sql = "SELECT `called_number_id` FROM `called_numbers` WHERE `numbers` = :called_tele_in";
+      $stmt = $db->prepare($sql);
+      $stmt->bindValue(':called_tele_in', $called_tele_in);
+      $stmt->execute();
+      $called_number_id = $stmt->fetchColumn();
+
+      $sql = "INSERT INTO `inbound_calls` (`calling_number_id`, `called_number_id`, `date_time`, `state`, `notes`) VALUES (?, ?, ?, ?, ?)";
+      $stmt = $db->prepare($sql);
+      $stmt->bindParam(1, $calling_number_id);
+      $stmt->bindParam(2, $called_number_id);
+      $stmt->bindParam(3, $call_date_in);
+      $stmt->bindParam(4, $call_state_in);
+      $stmt->bindParam(5, $notes_in);
+      $stmt->execute();
+      header('Location: index.php');
+      exit;
+    }
+    header('Location: index.php');
+    exit;
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,60 +71,76 @@
   </div>
   <div>
     <?php
-      $sql =
-      "SELECT `calling_numbers.calling_code`, `calling_numbers.prefix`, `calling_numbers.numbers`, `inbound_calls.date_time`, `called_numbers.calling_code`, `called_numbers.prefix`, `called_numbers.numbers` 
-      FROM `inbound_calls`
-      JOIN `calling_numbers` ON `inbound_calls.calling_number_id` = `calling_numbers.calling_number_id`
-      JOIN `called_numbers` ON `inbound_calls.called_number_id` = `called_numbers.called_number_id`
-      ORDER BY `calling_numbers.numbers`, `inbound_calls.date_time`";
+      /*$sql =
+      "SELECT
+`calling_numbers.calling_code`,
+`calling_numbers.prefix`,
+`calling_numbers.numbers`,
+`inbound_calls.date_time`,
+`called_numbers.calling_code`,
+`called_numbers.prefix`,
+`called_numbers.numbers`
+FROM
+`inbound_calls`
+JOIN
+`calling_numbers`
+ON
+`inbound_calls.calling_number_id` = `calling_numbers.calling_number_id`
+JOIN
+`called_numbers`
+ON
+`inbound_calls.called_number_id` = `called_numbers.called_number_id`
+ORDER BY
+`calling_numbers.numbers` ,`inbound_calls.date_time`";*/
       //$sql = "SELECT `calling_numbers.calling_code`, `calling_numbers.prefix`, `calling_numbers.numbers`, `inbound_calls.date_time`, `called_numbers.calling_code`, `called_numbers.prefix`, `called_numbers.numbers` FROM `inbound_calls` JOIN `calling_numbers` ON `inbound_calls.calling_number_id` = `calling_numbers.calling_number_id` JOIN `called_numbers` ON `inbound_calls.called_number_id` = `called_numbers.called_number_id` ORDER BY `calling_numbers.numbers`, `inbound_calls.date_time`";
-      //$sql = "SELECT * FROM `inbound_calls` ORDER BY `date_time`";
+      $sql = "SELECT * FROM `inbound_calls` ORDER BY `date_time`";
       $stmt = $db->prepare($sql);
       $stmt->execute();
 
       echo "<table class='table table-striped'>";
-      echo "<tr><td>" . 'calling_numbers.calling_code' . "</td><td> " . 'calling_numbers.prefix' . "</td><td>" . 'calling_numbers.numbers' . "</td><td>" . 'inbound_calls.date_time' . "</td><td>" . 'called_numbers.calling_code' . "</td><td>" . 'called_numbers.prefix' . "</td><td>" . 'called_numbers.numbers' . "</td></tr>";
-      while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "<tr><td>" . $result['calling_numbers.calling_code'] . "</td><td> " . $result['calling_numbers.prefix'] . "</td><td>" . $result['calling_numbers.numbers'] . "</td><td>" . $result['inbound_calls.date_time'] . "</td><td>" . $result['called_numbers.calling_code'] . "</td><td>" . $result['called_numbers.prefix'] . "</td><td>" . $result['called_numbers.numbers'] . "</td></tr>";
+      //echo "<tr><td>" . 'calling_numbers.calling_code' . "</td><td> " . 'calling_numbers.prefix' . "</td><td>" . 'calling_numbers.numbers' . "</td><td>" . 'inbound_calls.date_time' . "</td><td>" . 'called_numbers.calling_code' . "</td><td>" . 'called_numbers.prefix' . "</td><td>" . 'called_numbers.numbers' . "</td></tr>";
+      /*while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
         //echo "<tr><td>" . $result['calling_numbers.calling_code'] . "</td><td> " . $result['calling_numbers.prefix'] . "</td><td>" . $result['calling_numbers.numbers'] . "</td><td>" . $result['inbound_calls.date_time'] . "</td><td>" . $result['called_numbers.calling_code'] . "</td><td>" . $result['called_numbers.prefix'] . "</td><td>" . $result['called_numbers.numbers'] . "</td></tr>";
-      }
-      /*
+        echo "<tr><td>" . $result['calling_numbers.calling_code'] . "</td><td> " . $result['calling_numbers.prefix'] . "</td><td>" . $result['calling_numbers.numbers'] . "</td><td>" . $result['inbound_calls.date_time'] . "</td><td>" . $result['called_numbers.calling_code'] . "</td><td>" . $result['called_numbers.prefix'] . "</td><td>" . $result['called_numbers.numbers'] . "</td></tr>";
+      }*/
+
       echo "<tr><td>" . 'call_id' . "</td><td> " . 'calling_number_id' . "</td><td>" . 'called_number_id' . "</td><td>" . 'date_time' . "</td><td>" . 'state' . "</td><td>" . 'notes' . "</td></tr>";
       while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
         echo "<tr><td>" . $result['call_id'] . "</td><td> " . $result['calling_number_id'] . "</td><td>" . $result['called_number_id'] . "</td><td>" . $result['date_time'] . "</td><td>" . $result['state'] . "</td><td>" . $result['notes'] . "</td></tr>";
       }
-      */
+
       echo "</table>";
     ?>
   </div>
   <div>
-    <form id="form1" name="form1" method="post" action="<?php echo $PHP_SELF; ?>">
+  <form method="post" action="index.php">
+    <div>
         Hívó telefonszám :
-        <select Emp Name='NEW'>
-        <option value="">--- Select ---</option>
-        <?php
+        <select name="calling_tele_in">
+          <option value="">--- Select ---</option>
+          <?php
 
-          $sql = "SELECT `numbers` FROM `calling_numbers` ORDER BY `prefix`";
-          $stmt = $db->prepare($sql);
-          $stmt->execute();
+            $sql = "SELECT `numbers` FROM `calling_numbers` ORDER BY `prefix`";
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
 
-            $select="unknown_callers";
-            if (isset ($select)&&$select!=""){
-            $select=$_POST ['NEW'];
-        }
-        ?>
-        <?php
-        while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-            ?>
-                <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
-            <?php
-            }
-            ?>
+              $select="unknown_callers";
+              if (isset ($select)&&$select!=""){
+              $select=$_POST ['NEW'];
+          }
+          ?>
+          <?php
+          while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
+              ?>
+                  <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
+              <?php
+              }
+              ?>
         </select>
-    </form>
-    <form id="form2" name="form2" method="post" action="<?php echo $PHP_SELF; ?>">
+    </div>
+    <div>
         Hívott telefonszám :
-        <select Emp Name='NEW'>
+        <select name="called_tele_in">
         <option value="">--- Select ---</option>
         <?php
 
@@ -99,34 +161,37 @@
             }
             ?>
         </select>
-    </form>
-    <form id="form3" name="form3" method="post" action="<?php echo $PHP_SELF; ?>">
-    <div class="container">
-       <div class="row">
-          <div class='col-sm-6'>
-             <div class="form-group">
-                <div class='input-group date' id='datetimepicker2'>
-                   <input type='text' class="form-control"/>
-                   <span class="input-group-addon">
-                   <span class="glyphicon glyphicon-calendar"></span>
-                   </span>
-                </div>
-             </div>
-          </div>
-          <script type="text/javascript">
-             $(function () {
-                 $('#datetimepicker2').datetimepicker({
-                     locale: 'hu'
-                 });
-             });
-          </script>
-       </div>
     </div>
-    </form>
     <div>
-      <label>Megjegyzés: </label><br>
-      <input id="userIDField" type="text" name="userID"><br><br>
+      <div class="container">
+         <div class="row">
+            <div class='col-sm-6'>
+               <div class="form-group">
+                  <div class='input-group date'>
+                     <input name="call_date_in" type='datetime-local' class="form-control"/>
+                     </span>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
     </div>
-  </div>
+    <div>
+        Hívás állapota:
+        <select name="call_state_in">
+          <option value="missed">Nem fogadva</option>
+          <option value="accepted">Fogadva</option>
+          <option value="denied">Elutasítva</option>
+        </select>
+    </div>
+    <div>
+      Megjegyzés:
+      <input name="notes_in" type="text">
+    </div>
+    <div>
+      <button type="submit" name="save_call">Hívás mentése</button>
+    </div>
+  </form>
+</div>
 </body>
 </html>

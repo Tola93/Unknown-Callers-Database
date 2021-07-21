@@ -112,7 +112,7 @@
       <input name="numbers_in" type="text">
     </div>
     <div>
-      <button type="submit" name="save_phone">Telefonszám elmentése</button>
+      <button type="submit" name="save_phone">Telefonszám mentése</button>
     </div>
   </form>
 </body>
