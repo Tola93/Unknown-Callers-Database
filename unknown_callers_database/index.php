@@ -16,8 +16,6 @@
     if (empty($call_date_in)) { array_push($errors, "call_date_in hiba"); }
     if (empty($call_state_in)) { array_push($errors, "call_state_in hiba"); }
 
-    //$call_date_in = "2020-01-01 00:00:01";
-
     if (count($errors) == 0) {
 
       $sql = "SELECT `calling_number_id` FROM `calling_numbers` WHERE `numbers` = :calling_tele_in";
@@ -71,127 +69,106 @@
   </div>
   <div>
     <?php
-      /*$sql =
+      $sql =
       "SELECT
-`calling_numbers.calling_code`,
-`calling_numbers.prefix`,
-`calling_numbers.numbers`,
-`inbound_calls.date_time`,
-`called_numbers.calling_code`,
-`called_numbers.prefix`,
-`called_numbers.numbers`
-FROM
-`inbound_calls`
-JOIN
-`calling_numbers`
-ON
-`inbound_calls.calling_number_id` = `calling_numbers.calling_number_id`
-JOIN
-`called_numbers`
-ON
-`inbound_calls.called_number_id` = `called_numbers.called_number_id`
-ORDER BY
-`calling_numbers.numbers` ,`inbound_calls.date_time`";*/
-      //$sql = "SELECT `calling_numbers.calling_code`, `calling_numbers.prefix`, `calling_numbers.numbers`, `inbound_calls.date_time`, `called_numbers.calling_code`, `called_numbers.prefix`, `called_numbers.numbers` FROM `inbound_calls` JOIN `calling_numbers` ON `inbound_calls.calling_number_id` = `calling_numbers.calling_number_id` JOIN `called_numbers` ON `inbound_calls.called_number_id` = `called_numbers.called_number_id` ORDER BY `calling_numbers.numbers`, `inbound_calls.date_time`";
-      $sql = "SELECT * FROM `inbound_calls` ORDER BY `date_time`";
+      (calling_numbers.calling_code) AS `calling_code1`, (calling_numbers.prefix) AS `prefix1`, (calling_numbers.numbers) AS `numbers1`,
+      (inbound_calls.date_time) AS `date_time`, (inbound_calls.state) AS `state`, (inbound_calls.notes) AS `notes`,
+      (called_numbers.calling_code) AS `calling_code2`, (called_numbers.prefix) AS `prefix2`, (called_numbers.numbers) AS `numbers2`
+      FROM `inbound_calls`
+      JOIN `calling_numbers`
+      ON (inbound_calls.calling_number_id = calling_numbers.calling_number_id)
+      JOIN `called_numbers`
+      ON (inbound_calls.called_number_id = called_numbers.called_number_id)";
       $stmt = $db->prepare($sql);
       $stmt->execute();
 
       echo "<table class='table table-striped'>";
-      //echo "<tr><td>" . 'calling_numbers.calling_code' . "</td><td> " . 'calling_numbers.prefix' . "</td><td>" . 'calling_numbers.numbers' . "</td><td>" . 'inbound_calls.date_time' . "</td><td>" . 'called_numbers.calling_code' . "</td><td>" . 'called_numbers.prefix' . "</td><td>" . 'called_numbers.numbers' . "</td></tr>";
-      /*while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        //echo "<tr><td>" . $result['calling_numbers.calling_code'] . "</td><td> " . $result['calling_numbers.prefix'] . "</td><td>" . $result['calling_numbers.numbers'] . "</td><td>" . $result['inbound_calls.date_time'] . "</td><td>" . $result['called_numbers.calling_code'] . "</td><td>" . $result['called_numbers.prefix'] . "</td><td>" . $result['called_numbers.numbers'] . "</td></tr>";
-        echo "<tr><td>" . $result['calling_numbers.calling_code'] . "</td><td> " . $result['calling_numbers.prefix'] . "</td><td>" . $result['calling_numbers.numbers'] . "</td><td>" . $result['inbound_calls.date_time'] . "</td><td>" . $result['called_numbers.calling_code'] . "</td><td>" . $result['called_numbers.prefix'] . "</td><td>" . $result['called_numbers.numbers'] . "</td></tr>";
-      }*/
 
-      echo "<tr><td>" . 'call_id' . "</td><td> " . 'calling_number_id' . "</td><td>" . 'called_number_id' . "</td><td>" . 'date_time' . "</td><td>" . 'state' . "</td><td>" . 'notes' . "</td></tr>";
+      echo "<tr><td>" . 'calling_numbers.calling_code' . "</td><td> " . 'calling_numbers.prefix' . "</td><td>" . 'calling_numbers.numbers' . "</td><td>" . 'inbound_calls.date_time' . "</td><td>" . 'called_numbers.calling_code' . "</td><td>" . 'called_numbers.prefix' . "</td><td>" . 'called_numbers.numbers' . "</td><td>" . 'state' . "</td><td>" . 'notes' . "</td></tr>";
       while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "<tr><td>" . $result['call_id'] . "</td><td> " . $result['calling_number_id'] . "</td><td>" . $result['called_number_id'] . "</td><td>" . $result['date_time'] . "</td><td>" . $result['state'] . "</td><td>" . $result['notes'] . "</td></tr>";
+        echo "<tr><td>" . $result['calling_code1'] . "</td><td> " . $result['prefix1'] . "</td><td>" . $result['numbers1'] . "</td><td>" . $result['date_time'] . "</td><td>" . $result['calling_code2'] . "</td><td>" . $result['prefix2'] . "</td><td>" . $result['numbers2'] . "</td><td>" . $result['state'] . "</td><td>" . $result['notes'] . "</td></tr>";
       }
 
       echo "</table>";
     ?>
   </div>
   <div>
-  <form method="post" action="index.php">
-    <div>
+    <form method="post" action="index.php">
+      <div>
         Hívó telefonszám :
         <select name="calling_tele_in">
           <option value="">--- Select ---</option>
           <?php
-
             $sql = "SELECT `numbers` FROM `calling_numbers` ORDER BY `prefix`";
             $stmt = $db->prepare($sql);
             $stmt->execute();
 
-              $select="unknown_callers";
-              if (isset ($select)&&$select!=""){
-              $select=$_POST ['NEW'];
-          }
-          ?>
-          <?php
-          while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-              ?>
-                  <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
-              <?php
-              }
-              ?>
-        </select>
-    </div>
-    <div>
-        Hívott telefonszám :
-        <select name="called_tele_in">
-        <option value="">--- Select ---</option>
-        <?php
-
-          $sql = "SELECT `numbers` FROM `called_numbers` ORDER BY `prefix`";
-          $stmt = $db->prepare($sql);
-          $stmt->execute();
-
             $select="unknown_callers";
             if (isset ($select)&&$select!=""){
             $select=$_POST ['NEW'];
-        }
-        ?>
-        <?php
-        while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
+            }
+          ?>
+          <?php
+            while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
+          ?>
+              <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
+          <?php
+            }
+          ?>
+      </select>
+      </div>
+      <div>
+        Hívott telefonszám :
+        <select name="called_tele_in">
+          <option value="">--- Select ---</option>
+            <?php
+              $sql = "SELECT `numbers` FROM `called_numbers` ORDER BY `prefix`";
+              $stmt = $db->prepare($sql);
+              $stmt->execute();
+
+              $select="unknown_callers";
+              if (isset ($select)&&$select!=""){
+                $select=$_POST ['NEW'];
+              }
+            ?>
+            <?php
+              while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
             ?>
                 <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
             <?php
-            }
+              }
             ?>
         </select>
-    </div>
-    <div>
-      <div class="container">
-         <div class="row">
-            <div class='col-sm-6'>
-               <div class="form-group">
-                  <div class='input-group date'>
-                     <input name="call_date_in" type='datetime-local' class="form-control"/>
-                     </span>
-                  </div>
-               </div>
-            </div>
-         </div>
       </div>
-    </div>
-    <div>
+      <div>
+        <div class="container">
+          <div class="row">
+            <div class='col-sm-6'>
+              <div class="form-group">
+                <div class='input-group date'>
+                  <input name="call_date_in" type='datetime-local' class="form-control"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
         Hívás állapota:
         <select name="call_state_in">
           <option value="missed">Nem fogadva</option>
           <option value="accepted">Fogadva</option>
           <option value="denied">Elutasítva</option>
         </select>
-    </div>
-    <div>
-      Megjegyzés:
-      <input name="notes_in" type="text">
-    </div>
-    <div>
-      <button type="submit" name="save_call">Hívás mentése</button>
-    </div>
-  </form>
-</div>
+      </div>
+      <div>
+        Megjegyzés:
+        <input name="notes_in" type="text">
+      </div>
+      <div>
+        <button type="submit" name="save_call">Hívás mentése</button>
+      </div>
+    </form>
+  </div>
 </body>
 </html>

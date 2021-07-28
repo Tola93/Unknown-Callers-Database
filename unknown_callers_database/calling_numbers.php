@@ -66,7 +66,7 @@
     echo "<table class='table table-striped'>";
     echo "<tr><td> " . 'calling_code' . "</td><td>" . 'prefix' . "</td><td>" . 'numbers' . "</td></tr>";
     while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      echo "<tr><td>" . $result['calling_code'] . "</td><td>" . $result['prefix'] . "</td><td>" . $result['numbers'] . "</td></tr>";
+      echo "<tr class='tele_rows' id='$result[calling_number_id]' name='$result[calling_number_id]'><td>" . $result['calling_code'] . "</td><td>" . $result['prefix'] . "</td><td>" . $result['numbers'] . "</td><td><a href='edit.php?calling_number_id=$result[calling_number_id]'>Módosítás</a></td><td><a href='delete.php?calling_number_id=$result[calling_number_id]'>Törlés</a></td></tr>";
     }
     echo "</table>";
   ?>

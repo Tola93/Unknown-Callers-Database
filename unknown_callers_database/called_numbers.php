@@ -1,5 +1,9 @@
 <?php
   include("database_connection.php");
+
+  $sql = "SELECT * FROM `called_numbers` ORDER BY `numbers`";
+  $stmt = $db->prepare($sql);
+  $stmt->execute();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,8 +23,8 @@
     <form action="index.php">
       <input type="submit" value="Index"/>
     </form>
-    <form action="calling_numbers.php">
-      <input type="submit" value="Hívó számok" />
+    <form action="called_numbers.php">
+      <input type="submit" value="Hívott számok" />
     </form>
   </div>
   <?php
@@ -31,57 +35,54 @@
     echo "<table class='table table-striped'>";
     echo "<tr><td> " . 'calling_code' . "</td><td>" . 'prefix' . "</td><td>" . 'numbers' . "</td></tr>";
     while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      echo "<tr><td>" . $result['calling_code'] . "</td><td>" . $result['prefix'] . "</td><td>" . $result['numbers'] . "</td></tr>";
+      echo "<tr class='tele_rows' id='$result[called_number_id]' name='$result[called_number_id]'><td>" . $result['calling_code'] . "</td><td>" . $result['prefix'] . "</td><td>" . $result['numbers'] . "</td><td><a href='edit.php?called_number_id=$result[called_number_id]'>Módosítás</a></td><td><a href='delete.php?called_number_id=$result[called_number_id]'>Törlés</a></td></tr>";
     }
     echo "</table>";
   ?>
-  <form id="form1" name="form1" method="post" action="<?php echo $PHP_SELF; ?>">
-    calling_code:
-    <select Emp Name='NEW'>
-      <option value="">--- Select ---</option>
-      <?php
-        $sql = "SELECT `calling_code` FROM `country_calling_codes` ORDER BY `calling_code`";
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $select="unknown_callers";
-        if (isset ($select)&&$select!=""){
-          $select=$_POST ['NEW'];
-        }
-      ?>
-      <?php
-        while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-      ?>
-      <option value="<?php echo $row_list['calling_code']; ?>"><?php echo $row_list['calling_code']; ?></option>
-      <?php
-        }
-      ?>
-    </select>
+  <form method="post" action="called_numbers.php">
+    <div>
+      calling_code:
+      <select name="calling_code_in">
+        <option value="">--- Select ---</option>
+        <?php
+          $sql = "SELECT `calling_code` FROM `country_calling_codes` ORDER BY `calling_code`";
+          $stmt = $db->prepare($sql);
+          $stmt->execute();
+        ?>
+        <?php
+          while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
+        ?>
+        <option value="<?php echo $row_list['calling_code']; ?>"><?php echo $row_list['calling_code']; ?></option>
+        <?php
+          }
+        ?>
+      </select>
+    </div>
+    <div>
+      prefix:
+      <select name="prefix_in" >
+        <option value="">--- Select ---</option>
+        <?php
+          $sql = "SELECT `prefix` FROM `prefixes_hu` ORDER BY `prefix`";
+          $stmt = $db->prepare($sql);
+          $stmt->execute();
+        ?>
+        <?php
+          while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
+        ?>
+        <option value="<?php echo $row_list['prefix']; ?>"><?php echo $row_list['prefix']; ?></option>
+        <?php
+          }
+        ?>
+      </select>
+    </div>
+    <div>
+      numbers:
+      <input name="numbers_in" type="text">
+    </div>
+    <div>
+      <button type="submit" name="save_phone">Telefonszám mentése</button>
+    </div>
   </form>
-  <form id="form2" name="form2" method="post" action="<?php echo $PHP_SELF; ?>">
-    prefix:
-    <select Emp Name='NEW'>
-      <option value="">--- Select ---</option>
-      <?php
-        $sql = "SELECT `prefix` FROM `prefixes_hu` ORDER BY `prefix`";
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
-        $select="unknown_callers";
-        if (isset ($select)&&$select!=""){
-          $select=$_POST ['NEW'];
-        }
-      ?>
-      <?php
-        while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-      ?>
-      <option value="<?php echo $row_list['prefix']; ?>"><?php echo $row_list['prefix']; ?></option>
-      <?php
-        }
-      ?>
-    </select>
-  </form>
-  <div>
-    numbers:
-    <input id="userIDField" type="text" name="userID">
-  </div>
 </body>
 </html>
