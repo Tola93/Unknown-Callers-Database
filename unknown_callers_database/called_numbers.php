@@ -23,8 +23,8 @@
     <form action="index.php">
       <input type="submit" value="Index"/>
     </form>
-    <form action="called_numbers.php">
-      <input type="submit" value="Hívott számok" />
+    <form action="calling_numbers.php">
+      <input type="submit" value="Hívó számok" />
     </form>
   </div>
   <?php

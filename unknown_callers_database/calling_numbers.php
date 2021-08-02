@@ -70,7 +70,9 @@
     }
     echo "</table>";
   ?>
+
   <form method="post" action="calling_numbers.php">
+
     <div>
       calling_code:
       <select name="calling_code_in">
@@ -89,6 +91,7 @@
         ?>
       </select>
     </div>
+
     <div>
       prefix:
       <select name="prefix_in" >
@@ -107,13 +110,16 @@
         ?>
       </select>
     </div>
+
     <div>
       numbers:
       <input name="numbers_in" type="text">
     </div>
+
     <div>
       <button type="submit" name="save_phone">Telefonszám mentése</button>
     </div>
   </form>
+
 </body>
 </html>
