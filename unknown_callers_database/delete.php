@@ -1,10 +1,12 @@
 <?php
+
   include("database_connection.php");
 
   $errors = array();
 
   $isIncomingCaller=False;
   $isUserTelephone=False;
+  $isCall=False;
 
   if (strpos($_SERVER['REQUEST_URI'], "calling_number_id") !== false) {
 
@@ -31,6 +33,29 @@
 
   }
 
+  if (strpos($_SERVER['REQUEST_URI'], "call_id") !== false) {
+
+    $sql =
+    "SELECT
+    (inbound_calls.call_id) AS `call_id`,
+    (calling_numbers.calling_code) AS `calling_code1`, (calling_numbers.prefix) AS `prefix1`, (calling_numbers.numbers) AS `numbers1`,
+    (inbound_calls.date_time) AS `date_time`, (inbound_calls.state) AS `state`, (inbound_calls.notes) AS `notes`,
+    (called_numbers.calling_code) AS `calling_code2`, (called_numbers.prefix) AS `prefix2`, (called_numbers.numbers) AS `numbers2`
+    FROM `inbound_calls`
+    JOIN `calling_numbers`
+    ON (inbound_calls.calling_number_id = calling_numbers.calling_number_id)
+    JOIN `called_numbers`
+    ON (inbound_calls.called_number_id = called_numbers.called_number_id)
+    WHERE `call_id`=:call_id";
+    $stmt = $db->prepare($sql);
+    $call_id =  preg_replace("/[^a-zA-Z0-9-]/","",$_GET['call_id']);
+    $stmt->bindValue(':call_id', htmlspecialchars($call_id));
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $isCall=True;
+
+  }
+
   if (isset($_POST['removeIncomingTelephoneNumber'])) {
     $calling_number_id = !empty($_POST['calling_number_id']) ? trim($_POST['calling_number_id']) : null;
     $calling_code = !empty($_POST['calling_code_in']) ? trim($_POST['calling_code_in']) : null;
@@ -45,6 +70,7 @@
     }
         header('Location: calling_numbers.php');
   }
+
   if (isset($_POST['removeUserTelephoneNumber'])) {
     $called_number_id = !empty($_POST['called_number_id']) ? trim($_POST['called_number_id']) : null;
     $calling_code = !empty($_POST['calling_code_in']) ? trim($_POST['calling_code_in']) : null;
@@ -58,6 +84,18 @@
       $result = $stmt->execute();
     }
     header('Location: called_numbers.php');
+  }
+
+  if (isset($_POST['removeIncomingCall'])) {
+    $call_id = !empty($_POST['call_id']) ? trim($_POST['call_id']) : null;
+
+    if (count($errors) == 0) {
+      $sql = "DELETE FROM `inbound_calls` WHERE `call_id`=:call_id";
+      $stmt = $db->prepare($sql);
+      $stmt->bindValue(':call_id', $call_id);
+      $result = $stmt->execute();
+    }
+    header('Location: index.php');
   }
 
 ?>
@@ -83,23 +121,10 @@
       <div>
 
         <div>
-          <form action="index.php">
-            <input type="submit" value="Index"/>
-          </form>
-          <form action="calling_numbers.php">
-            <input type="submit" value="Hívó számok" />
-          </form>
-          <form action="called_numbers.php">
-            <input type="submit" value="Hívott számok" />
-          </form>
-        </div>
-
-        <div>
           <form method="post" action="delete.php">
             Biztos, hogy törölni szeretnéd ezt a telefonszámot?
 
-            <div>
-              calling_number_id:
+            <div hidden>
               <input readonly name="calling_number_id" type="text" value="<?php echo $result['calling_number_id']; ?>">
             </div>
 
@@ -139,23 +164,10 @@
         <div>
 
           <div>
-            <form action="index.php">
-              <input type="submit" value="Index"/>
-            </form>
-            <form action="calling_numbers.php">
-              <input type="submit" value="Hívó számok" />
-            </form>
-            <form action="called_numbers.php">
-              <input type="submit" value="Hívott számok" />
-            </form>
-          </div>
-
-          <div>
             <form method="post" action="delete.php">
               Biztos, hogy törölni szeretnéd ezt a telefonszámot?
 
-              <div>
-                called_number_id:
+              <div hidden>
                 <input readonly name="called_number_id" type="text" value="<?php echo $result['called_number_id']; ?>">
               </div>
 
@@ -192,6 +204,77 @@
 
   </div>
 
-</body>
+  <div>
+    <?php if ($isCall): ?>
+      <div>
 
+          <div>
+            <form method="post" action="delete.php">
+              Biztos, hogy törölni szeretnéd ezt a hívást?
+
+              <div hidden>
+                <input readonly name="call_id" type="text" value="<?php echo $result['call_id']; ?>">
+              </div>
+
+              <div>
+                calling_numbers.calling_code:
+                <input readonly name="calling_code1" type="text" value="<?php echo $result['calling_code1']; ?>">
+              </div>
+
+              <div>
+                calling_numbers.prefix:
+                <input readonly name="prefix1" type="text" value="<?php echo $result['prefix1']; ?>">
+              </div>
+
+              <div>
+                calling_numbers.numbers:
+                <input readonly name="numbers1" type="text" value="<?php echo $result['numbers1']; ?>">
+              </div>
+
+              <div>
+                inbound_calls.date_time:
+                <input readonly name="date_time" type="text" value="<?php echo $result['date_time']; ?>">
+              </div>
+
+              <div>
+                called_numbers.calling_code:
+                <input readonly name="calling_code2" type="text" value="<?php echo $result['calling_code2']; ?>">
+              </div>
+
+              <div>
+                called_numbers.prefix	:
+                <input readonly name="prefix2" type="text" value="<?php echo $result['prefix2']; ?>">
+              </div>
+
+              <div>
+                called_numbers.numbers:
+                <input readonly name="numbers2" type="text" value="<?php echo $result['numbers2']; ?>">
+              </div>
+
+              <div>
+                state:
+                <input readonly name="state" type="text" value="<?php echo $result['state']; ?>">
+              </div>
+
+              <div>
+                notes:
+                <input readonly name="notes" type="text" value="<?php echo $result['notes']; ?>">
+              </div>
+
+              <div>
+                <button type="submit" name="removeIncomingCall">Hívás törlése</button>
+              </div>
+            </form>
+        </div>
+
+        <div>
+          <form action="index.php">
+            <input type="submit" value="Mégse" />
+          </form>
+        </div>
+
+      </div>
+    <?php endif; ?>
+  </div>
+</body>
 </html>
