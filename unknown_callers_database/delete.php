@@ -115,49 +115,51 @@
 </head>
 
 <body>
-
   <div>
-    <?php if ($isIncomingCaller): ?>
-      <div>
 
+    <div>
+      <?php if ($isIncomingCaller): ?>
         <div>
-          <form method="post" action="delete.php">
-            Biztos, hogy törölni szeretnéd ezt a telefonszámot?
 
-            <div hidden>
-              <input readonly name="calling_number_id" type="text" value="<?php echo $result['calling_number_id']; ?>">
-            </div>
+          <div>
+            <form method="post" action="delete.php">
+              Biztos, hogy törölni szeretnéd ezt a telefonszámot?
 
-            <div>
-              calling_code:
-              <input readonly name="calling_code_in" type="text" value="<?php echo $result['calling_code']; ?>">
-            </div>
+              <div hidden>
+                <input readonly name="calling_number_id" type="text" value="<?php echo $result['calling_number_id']; ?>">
+              </div>
 
-            <div>
-              prefix:
-              <input readonly name="prefix_in" type="text" value="<?php echo $result['prefix']; ?>">
-            </div>
+              <div>
+                calling_code:
+                <input readonly name="calling_code_in" type="text" value="<?php echo $result['calling_code']; ?>">
+              </div>
 
-            <div>
-              numbers:
-              <input readonly name="numbers_in" type="text" value="<?php echo $result['numbers']; ?>">
-            </div>
+              <div>
+                prefix:
+                <input readonly name="prefix_in" type="text" value="<?php echo $result['prefix']; ?>">
+              </div>
 
-            <div>
-              <button type="submit" name="removeIncomingTelephoneNumber">Telefonszám törlése</button>
-            </div>
+              <div>
+                numbers:
+                <input readonly name="numbers_in" type="text" value="<?php echo $result['numbers']; ?>">
+              </div>
 
-          </form>
+              <div>
+                <button type="submit" name="removeIncomingTelephoneNumber">Telefonszám törlése</button>
+              </div>
+
+            </form>
+          </div>
+
+          <div>
+            <form action="calling_numbers.php">
+              <input type="submit" value="Mégse" />
+            </form>
+          </div>
+
         </div>
-
-        <div>
-          <form action="calling_numbers.php">
-            <input type="submit" value="Mégse" />
-          </form>
-        </div>
-
-      </div>
-    <?php endif; ?>
+      <?php endif; ?>
+    </div>
 
     <div>
       <?php if ($isUserTelephone): ?>
@@ -201,12 +203,11 @@
 
         </div>
       <?php endif; ?>
+    </div>
 
-  </div>
-
-  <div>
-    <?php if ($isCall): ?>
-      <div>
+    <div>
+      <?php if ($isCall): ?>
+        <div>
 
           <div>
             <form method="post" action="delete.php">
@@ -273,8 +274,10 @@
           </form>
         </div>
 
-      </div>
-    <?php endif; ?>
+        </div>
+      <?php endif; ?>
+    </div>
+    
   </div>
 </body>
 </html>

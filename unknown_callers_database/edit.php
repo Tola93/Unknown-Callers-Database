@@ -143,195 +143,180 @@
 
 <body>
   <div>
-    <?php if ($isIncomingCaller): ?>
-      <div>
 
+    <div>
+      <?php if ($isIncomingCaller): ?>
+        <div>
+
+          <div>
+            <form method="post" action="edit.php">
+
+              <div hidden>
+                <input readonly name="calling_number_id" type="text" value="<?php echo $result['calling_number_id']; ?>">
+              </div>
+
+              <div>
+                calling_code:
+                <select name="calling_code_in">
+                  <option selected><?php echo $result['calling_code']; ?></option>
+                  <?php
+                    $sql = "SELECT `calling_code` FROM `country_calling_codes` ORDER BY `calling_code`";
+                    $stmt = $db->prepare($sql);
+                    $stmt->execute();
+                  ?>
+                  <?php
+                    while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
+                  ?>
+                  <option value="<?php echo $row_list['calling_code']; ?>">
+                    <?php echo $row_list['calling_code']; ?>
+                  </option>
+                  <?php
+                    }
+                  ?>
+                </select>
+              </div>
+
+              <div>
+                prefix:
+                <select name="prefix_in" >
+                  <option selected><?php echo $result['prefix']; ?></option>
+                  <?php
+                    $sql = "SELECT `prefix` FROM `prefixes_hu` ORDER BY `prefix`";
+                    $stmt = $db->prepare($sql);
+                    $stmt->execute();
+                  ?>
+                  <?php
+                    while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
+                  ?>
+                  <option value="<?php echo $row_list['prefix']; ?>">
+                    <?php echo $row_list['prefix']; ?>
+                  </option>
+                  <?php
+                    }
+                  ?>
+                </select>
+              </div>
+
+              <div>
+                numbers:
+                <input name="numbers_in" type="text" value="<?php echo $result['numbers']; ?>">
+              </div>
+
+              <div>
+                <button type="submit" name="modifyIncomingTelephoneNumber">Módosítások mentése</button>
+              </div>
+
+            </form>
+          </div>
+
+          <div>
+            <form action="calling_numbers.php">
+              <input type="submit" value="Mégse" />
+            </form>
+          </div>
+
+        </div>
+      <?php endif; ?>
+    </div>
+
+    <div>
+      <?php if ($isUserTelephone): ?>
+        <div>
+
+          <div>
+            <form method="post" action="edit.php">
+
+              <div hidden>
+                <input readonly name="called_number_id" type="text" value="<?php echo $result['called_number_id']; ?>">
+              </div>
+
+              <div>
+                calling_code:
+                <select name="calling_code_in">
+                  <option selected><?php echo $result['calling_code']; ?></option>
+                  <?php
+                    $sql = "SELECT `calling_code` FROM `country_calling_codes` ORDER BY `calling_code`";
+                    $stmt = $db->prepare($sql);
+                    $stmt->execute();
+                  ?>
+                  <?php
+                    while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
+                  ?>
+                  <option value="<?php echo $row_list['calling_code']; ?>">
+                    <?php echo $row_list['calling_code']; ?>
+                  </option>
+                  <?php
+                    }
+                  ?>
+                </select>
+              </div>
+
+              <div>
+                prefix:
+                <select name="prefix_in" >
+                  <option selected><?php echo $result['prefix']; ?></option>
+                  <?php
+                    $sql = "SELECT `prefix` FROM `prefixes_hu` ORDER BY `prefix`";
+                    $stmt = $db->prepare($sql);
+                    $stmt->execute();
+                  ?>
+                  <?php
+                    while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
+                  ?>
+                  <option value="<?php echo $row_list['prefix']; ?>">
+                    <?php echo $row_list['prefix']; ?>
+                  </option>
+                  <?php
+                    }
+                  ?>
+                </select>
+              </div>
+
+              <div>
+                numbers:
+                <input name="numbers_in" type="text" value="<?php echo $result['numbers']; ?>">
+              </div>
+
+              <div>
+                <button type="submit" name="modifyUserTelephoneNumber">Módosítások mentése</button>
+              </div>
+
+            </form>
+          </div>
+
+          <div>
+            <form action="calling_numbers.php">
+              <input type="submit" value="Mégse" />
+            </form>
+          </div>
+
+        </div>
+      <?php endif; ?>
+    </div>
+
+    <div>
+      <?php if ($isCall): ?>
         <div>
           <form method="post" action="edit.php">
+            <div>
 
             <div hidden>
-              <input readonly name="calling_number_id" type="text" value="<?php echo $result['calling_number_id']; ?>">
+              <input readonly name="call_id" type="text" value="<?php echo $result['call_id']; ?>">
             </div>
 
             <div>
-              calling_code:
-              <select name="calling_code_in">
-                <option selected><?php echo $result['calling_code']; ?></option>
+              Hívó telefonszám :
+              <select name="calling_tele_in">
+                <option value="">--- Select ---</option>
+                <option selected><?php echo $result['numbers1']; ?></option>
                 <?php
-                  $sql = "SELECT `calling_code` FROM `country_calling_codes` ORDER BY `calling_code`";
-                  $stmt = $db->prepare($sql);
-                  $stmt->execute();
-                ?>
-                <?php
-                  while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-                ?>
-                <option value="<?php echo $row_list['calling_code']; ?>">
-                  <?php echo $row_list['calling_code']; ?>
-                </option>
-                <?php
-                  }
-                ?>
-              </select>
-            </div>
-
-            <div>
-              prefix:
-              <select name="prefix_in" >
-                <option selected><?php echo $result['prefix']; ?></option>
-                <?php
-                  $sql = "SELECT `prefix` FROM `prefixes_hu` ORDER BY `prefix`";
-                  $stmt = $db->prepare($sql);
-                  $stmt->execute();
-                ?>
-                <?php
-                  while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-                ?>
-                <option value="<?php echo $row_list['prefix']; ?>">
-                  <?php echo $row_list['prefix']; ?>
-                </option>
-                <?php
-                  }
-                ?>
-              </select>
-            </div>
-
-            <div>
-              numbers:
-              <input name="numbers_in" type="text" value="<?php echo $result['numbers']; ?>">
-            </div>
-
-            <div>
-              <button type="submit" name="modifyIncomingTelephoneNumber">Módosítások mentése</button>
-            </div>
-
-          </form>
-        </div>
-
-        <div>
-          <form action="calling_numbers.php">
-            <input type="submit" value="Mégse" />
-          </form>
-        </div>
-
-      </div>
-    <?php endif; ?>
-
-    <?php if ($isUserTelephone): ?>
-      <div>
-
-        <div>
-          <form method="post" action="edit.php">
-
-            <div hidden>
-              <input readonly name="called_number_id" type="text" value="<?php echo $result['called_number_id']; ?>">
-            </div>
-
-            <div>
-              calling_code:
-              <select name="calling_code_in">
-                <option selected><?php echo $result['calling_code']; ?></option>
-                <?php
-                  $sql = "SELECT `calling_code` FROM `country_calling_codes` ORDER BY `calling_code`";
-                  $stmt = $db->prepare($sql);
-                  $stmt->execute();
-                ?>
-                <?php
-                  while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-                ?>
-                <option value="<?php echo $row_list['calling_code']; ?>">
-                  <?php echo $row_list['calling_code']; ?>
-                </option>
-                <?php
-                  }
-                ?>
-              </select>
-            </div>
-
-            <div>
-              prefix:
-              <select name="prefix_in" >
-                <option selected><?php echo $result['prefix']; ?></option>
-                <?php
-                  $sql = "SELECT `prefix` FROM `prefixes_hu` ORDER BY `prefix`";
-                  $stmt = $db->prepare($sql);
-                  $stmt->execute();
-                ?>
-                <?php
-                  while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-                ?>
-                <option value="<?php echo $row_list['prefix']; ?>">
-                  <?php echo $row_list['prefix']; ?>
-                </option>
-                <?php
-                  }
-                ?>
-              </select>
-            </div>
-
-            <div>
-              numbers:
-              <input name="numbers_in" type="text" value="<?php echo $result['numbers']; ?>">
-            </div>
-
-            <div>
-              <button type="submit" name="modifyUserTelephoneNumber">Módosítások mentése</button>
-            </div>
-
-          </form>
-        </div>
-
-        <div>
-          <form action="calling_numbers.php">
-            <input type="submit" value="Mégse" />
-          </form>
-        </div>
-
-      </div>
-    <?php endif; ?>
-
-    <?php if ($isCall): ?>
-      <div>
-        <form method="post" action="edit.php">
-          <div hidden>
-            <input readonly name="call_id" type="text" value="<?php echo $result['call_id']; ?>">
-          </div>
-          <div>
-            Hívó telefonszám :
-            <select name="calling_tele_in">
-              <option value="">--- Select ---</option>
-              <option selected><?php echo $result['numbers1']; ?></option>
-              <?php
-                $sql = "SELECT `numbers` FROM `calling_numbers` ORDER BY `prefix`";
-                $stmt = $db->prepare($sql);
-                $stmt->execute();
-
-                $select="unknown_callers";
-                if (isset ($select)&&$select!=""){
-                $select=$_POST ['NEW'];
-                }
-              ?>
-              <?php
-                while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-              ?>
-                  <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
-              <?php
-                }
-              ?>
-          </select>
-          </div>
-          <div>
-            Hívott telefonszám :
-            <select name="called_tele_in">
-              <option value="">--- Select ---</option>
-              <option selected><?php echo $result['numbers2']; ?></option>
-                <?php
-                  $sql = "SELECT `numbers` FROM `called_numbers` ORDER BY `prefix`";
+                  $sql = "SELECT `numbers` FROM `calling_numbers` ORDER BY `prefix`";
                   $stmt = $db->prepare($sql);
                   $stmt->execute();
 
                   $select="unknown_callers";
                   if (isset ($select)&&$select!=""){
-                    $select=$_POST ['NEW'];
+                  $select=$_POST ['NEW'];
                   }
                 ?>
                 <?php
@@ -341,47 +326,75 @@
                 <?php
                   }
                 ?>
-            </select>
-          </div>
-          <div>
-            <div class="container">
-              <div class="row">
-                <div class='col-sm-6'>
-                  <div class="form-group">
-                    <div class='input-group date'>
-                      <input name="call_date_in" type='datetime-local' class="form-control" value="<?php echo $result['date_time']; ?>">
-                    </div>
-                  </div>
-                </div>
+              </select>
+            </div>
+
+            <div>
+              Hívott telefonszám :
+              <select name="called_tele_in">
+                <option value="">--- Select ---</option>
+                <option selected><?php echo $result['numbers2']; ?></option>
+                  <?php
+                    $sql = "SELECT `numbers` FROM `called_numbers` ORDER BY `prefix`";
+                    $stmt = $db->prepare($sql);
+                    $stmt->execute();
+
+                    $select="unknown_callers";
+                    if (isset ($select)&&$select!=""){
+                      $select=$_POST ['NEW'];
+                    }
+                  ?>
+                  <?php
+                    while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
+                  ?>
+                      <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
+                  <?php
+                    }
+                  ?>
+              </select>
+            </div>
+
+            <div>
+              Hívás dátuma:
+              <div class='input-group date'>
+                <?php $date_time = date("Y-m-d\TH:i:s", strtotime($result['date_time'])); ?>
+                <input name="call_date_in" type='datetime-local' class="form-control" value="<?php echo $date_time; ?>"/>
               </div>
             </div>
-          </div>
-          <div>
-            Hívás állapota:
-            <select name="call_state_in">
-              <option selected><?php echo $result['state']; ?></option>
-              <option value="missed">Nem fogadva</option>
-              <option value="accepted">Fogadva</option>
-              <option value="denied">Elutasítva</option>
-            </select>
-          </div>
-          <div>
-            Megjegyzés:
-            <input name="notes_in" type="text" value="<?php echo $result['notes']; ?>">
-          </div>
-          <div>
-            <button type="submit" name="modifyIncomingCall">Hívás mentése</button>
-          </div>
-        </form>
-      </div>
 
-      <div>
-        <form action="index.php">
-          <input type="submit" value="Mégse" />
-        </form>
-      </div>
+            <div>
+              Hívás állapota:
+              <select name="call_state_in">
+                <option selected><?php echo $result['state']; ?></option>
+                <option value="missed">Nem fogadva</option>
+                <option value="accepted">Fogadva</option>
+                <option value="denied">Elutasítva</option>
+              </select>
+            </div>
 
-    <?php endif; ?>
+            <div>
+              Megjegyzés:
+              <input name="notes_in" type="text" value="<?php echo $result['notes']; ?>">
+            </div>
+
+            <div>
+              <button type="submit" name="modifyIncomingCall">Hívás mentése</button>
+            </div>
+
+          </form>
+
+          </div>
+
+          <div>
+            <form action="index.php">
+              <input type="submit" value="Mégse" />
+            </form>
+          </div>
+
+        </div>
+      <?php endif; ?>
+    </div>
+
   </div>
 </body>
 </html>
