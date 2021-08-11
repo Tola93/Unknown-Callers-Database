@@ -158,20 +158,20 @@
               <div>
                 calling_code:
                 <select name="calling_code_in">
-                  <option selected><?php echo $result['calling_code']; ?></option>
+                  <?php $defaultCallingCode = $result['calling_code']; ?>
+                  <option selected><?php echo $defaultCallingCode ?></option>
                   <?php
-                    $sql = "SELECT `calling_code` FROM `country_calling_codes` ORDER BY `calling_code`";
-                    $stmt = $db->prepare($sql);
-                    $stmt->execute();
+                  $sql = "SELECT `calling_code` FROM `country_calling_codes` ORDER BY `calling_code`";
+                  $stmt = $db->prepare($sql);
+                  $stmt->execute();
+
+                  while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
                   ?>
-                  <?php
-                    while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-                  ?>
-                  <option value="<?php echo $row_list['calling_code']; ?>">
-                    <?php echo $row_list['calling_code']; ?>
-                  </option>
+                    <?php if($defaultCallingCode != $row_list['calling_code']){ ?>
+                      <option value="<?php echo $row_list['calling_code']; ?>"><?php echo $row_list['calling_code']; ?></option>
                   <?php
                     }
+                  }
                   ?>
                 </select>
               </div>
@@ -179,21 +179,21 @@
               <div>
                 prefix:
                 <select name="prefix_in" >
+                  <?php $defaultPrefix = $result['prefix']; ?>
                   <option selected><?php echo $result['prefix']; ?></option>
                   <?php
                     $sql = "SELECT `prefix` FROM `prefixes_hu` ORDER BY `prefix`";
                     $stmt = $db->prepare($sql);
                     $stmt->execute();
-                  ?>
-                  <?php
+
                     while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-                  ?>
-                  <option value="<?php echo $row_list['prefix']; ?>">
-                    <?php echo $row_list['prefix']; ?>
-                  </option>
-                  <?php
+                    ?>
+                      <?php if($defaultPrefix != $row_list['prefix']){ ?>
+                        <option value="<?php echo $row_list['prefix']; ?>"><?php echo $row_list['prefix']; ?></option>
+                    <?php
+                      }
                     }
-                  ?>
+                    ?>
                 </select>
               </div>
 
@@ -233,20 +233,20 @@
               <div>
                 calling_code:
                 <select name="calling_code_in">
-                  <option selected><?php echo $result['calling_code']; ?></option>
+                  <?php $defaultCallingCode = $result['calling_code']; ?>
+                  <option selected><?php echo $defaultCallingCode ?></option>
                   <?php
-                    $sql = "SELECT `calling_code` FROM `country_calling_codes` ORDER BY `calling_code`";
-                    $stmt = $db->prepare($sql);
-                    $stmt->execute();
+                  $sql = "SELECT `calling_code` FROM `country_calling_codes` ORDER BY `calling_code`";
+                  $stmt = $db->prepare($sql);
+                  $stmt->execute();
+
+                  while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
                   ?>
-                  <?php
-                    while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-                  ?>
-                  <option value="<?php echo $row_list['calling_code']; ?>">
-                    <?php echo $row_list['calling_code']; ?>
-                  </option>
+                    <?php if($defaultCallingCode != $row_list['calling_code']){ ?>
+                      <option value="<?php echo $row_list['calling_code']; ?>"><?php echo $row_list['calling_code']; ?></option>
                   <?php
                     }
+                  }
                   ?>
                 </select>
               </div>
@@ -254,21 +254,21 @@
               <div>
                 prefix:
                 <select name="prefix_in" >
+                  <?php $defaultPrefix = $result['prefix']; ?>
                   <option selected><?php echo $result['prefix']; ?></option>
                   <?php
                     $sql = "SELECT `prefix` FROM `prefixes_hu` ORDER BY `prefix`";
                     $stmt = $db->prepare($sql);
                     $stmt->execute();
-                  ?>
-                  <?php
+
                     while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-                  ?>
-                  <option value="<?php echo $row_list['prefix']; ?>">
-                    <?php echo $row_list['prefix']; ?>
-                  </option>
-                  <?php
+                    ?>
+                      <?php if($defaultPrefix != $row_list['prefix']){ ?>
+                        <option value="<?php echo $row_list['prefix']; ?>"><?php echo $row_list['prefix']; ?></option>
+                    <?php
+                      }
                     }
-                  ?>
+                    ?>
                 </select>
               </div>
 
@@ -307,50 +307,42 @@
             <div>
               Hívó telefonszám :
               <select name="calling_tele_in">
-                <option value="">--- Select ---</option>
+                <?php $callingTelenumber = $result['numbers1']; ?>
                 <option selected><?php echo $result['numbers1']; ?></option>
                 <?php
-                  $sql = "SELECT `numbers` FROM `calling_numbers` ORDER BY `prefix`";
-                  $stmt = $db->prepare($sql);
-                  $stmt->execute();
+                $sql = "SELECT `numbers` FROM `calling_numbers`";
+                $stmt = $db->prepare($sql);
+                $stmt->execute();
 
-                  $select="unknown_callers";
-                  if (isset ($select)&&$select!=""){
-                  $select=$_POST ['NEW'];
-                  }
+                while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
                 ?>
-                <?php
-                  while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-                ?>
-                    <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
+                <?php if($callingTelenumber != $row_list['numbers']){ ?>
+                <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
                 <?php
                   }
+                }
                 ?>
               </select>
             </div>
 
             <div>
-              Hívott telefonszám :
+              Hívó telefonszám :
               <select name="called_tele_in">
-                <option value="">--- Select ---</option>
+                <?php $calledTelenumber = $result['numbers2']; ?>
                 <option selected><?php echo $result['numbers2']; ?></option>
-                  <?php
-                    $sql = "SELECT `numbers` FROM `called_numbers` ORDER BY `prefix`";
-                    $stmt = $db->prepare($sql);
-                    $stmt->execute();
+                <?php
+                $sql = "SELECT `numbers` FROM `called_numbers`";
+                $stmt = $db->prepare($sql);
+                $stmt->execute();
 
-                    $select="unknown_callers";
-                    if (isset ($select)&&$select!=""){
-                      $select=$_POST ['NEW'];
-                    }
-                  ?>
-                  <?php
-                    while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
-                  ?>
-                      <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
-                  <?php
-                    }
-                  ?>
+                while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
+                ?>
+                <?php if($calledTelenumber != $row_list['numbers']){ ?>
+                <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
+                <?php
+                  }
+                }
+                ?>
               </select>
             </div>
 
@@ -364,11 +356,26 @@
 
             <div>
               Hívás állapota:
+              <?php $defaultCallState = $result['state']; ?>
               <select name="call_state_in">
-                <option selected><?php echo $result['state']; ?></option>
-                <option value="missed">Nem fogadva</option>
-                <option value="accepted">Fogadva</option>
-                <option value="denied">Elutasítva</option>
+                <?php switch ($defaultCallState) {
+                    case "missed": ?>
+                        <option selected value="missed">Nem fogadva</option>
+                        <option value="accepted">Fogadva</option>
+                        <option value="denied">Elutasítva</option>
+                        <?php break;
+                    case "accepted": ?>
+                        <option value="missed">Nem fogadva</option>
+                        <option selected value="accepted">Fogadva</option>
+                        <option value="denied">Elutasítva</option>
+                        <?php break;
+                    case "denied": ?>
+                        <option value="missed">Nem fogadva</option>
+                        <option value="accepted">Fogadva</option>
+                        <option selected value="denied">Elutasítva</option>
+                        <?php break;
+                }
+                ?>
               </select>
             </div>
 
