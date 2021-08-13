@@ -95,7 +95,7 @@
       $stmt->bindValue(':call_id', $call_id);
       $result = $stmt->execute();
     }
-    header('Location: index.php');
+    header('Location: incoming_calls.php');
   }
 
 ?>
@@ -269,7 +269,7 @@
         </div>
 
         <div>
-          <form action="index.php">
+          <form action="incoming_calls.php">
             <input type="submit" value="Mégse" />
           </form>
         </div>

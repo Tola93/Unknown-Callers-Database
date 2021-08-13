@@ -53,7 +53,10 @@
 <body>
   <div>
     <form action="index.php">
-      <input type="submit" value="Index"/>
+      <input type="submit" value="Főoldal" />
+    </form>
+    <form action="incoming_calls.php">
+      <input type="submit" value="Bejövő hívások"/>
     </form>
     <form action="calling_numbers.php">
       <input type="submit" value="Hívó számok" />
