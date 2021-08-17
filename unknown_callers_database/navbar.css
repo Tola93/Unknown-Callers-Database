@@ -1,0 +1,22 @@
+.navigation_items {
+  align-items: center;
+
+  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox;      /* TWEENER - IE 10 */
+  display: -webkit-flex;     /* NEW - Chrome */
+}
+/*
+.navigation_items--left {
+  flex: 1;
+  float: left;
+}
+.navigation_items--right {
+  flex: 2;
+  float: right;
+}
+.navigation__items--left, .navigation__items--right {
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}*/
