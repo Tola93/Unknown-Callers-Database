@@ -36,15 +36,15 @@
 
     $sql =
     "SELECT
-    (inbound_calls.call_id) AS `call_id`,
+    (incoming_calls.call_id) AS `call_id`,
     (calling_numbers.calling_code) AS `calling_code1`, (calling_numbers.prefix) AS `prefix1`, (calling_numbers.numbers) AS `numbers1`,
-    (inbound_calls.date_time) AS `date_time`, (inbound_calls.state) AS `state`, (inbound_calls.notes) AS `notes`,
+    (incoming_calls.date_time) AS `date_time`, (incoming_calls.state) AS `state`, (incoming_calls.notes) AS `notes`,
     (called_numbers.calling_code) AS `calling_code2`, (called_numbers.prefix) AS `prefix2`, (called_numbers.numbers) AS `numbers2`
-    FROM `inbound_calls`
+    FROM `incoming_calls`
     JOIN `calling_numbers`
-    ON (inbound_calls.calling_number_id = calling_numbers.calling_number_id)
+    ON (incoming_calls.calling_number_id = calling_numbers.calling_number_id)
     JOIN `called_numbers`
-    ON (inbound_calls.called_number_id = called_numbers.called_number_id)
+    ON (incoming_calls.called_number_id = called_numbers.called_number_id)
     WHERE `call_id`=:call_id";
     $stmt = $db->prepare($sql);
     $call_id =  preg_replace("/[^a-zA-Z0-9-]/","",$_GET['call_id']);
@@ -112,7 +112,7 @@
       $stmt->execute();
       $called_number_id = $stmt->fetchColumn();
 
-      $sql = "UPDATE `inbound_calls` SET `calling_number_id`=:calling_number_id, `called_number_id`=:called_number_id, `date_time`=:date_time, `state`=:state, `notes`=:notes WHERE `call_id`=:call_id";
+      $sql = "UPDATE `incoming_calls` SET `calling_number_id`=:calling_number_id, `called_number_id`=:called_number_id, `date_time`=:date_time, `state`=:state, `notes`=:notes WHERE `call_id`=:call_id";
       $stmt = $db->prepare($sql);
       $stmt->bindValue(':call_id', $call_id);
       $stmt->bindValue(':calling_number_id', $calling_number_id);
