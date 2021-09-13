@@ -14,10 +14,11 @@
     <?php
       echo "<div class='table-container'><table class='table table-striped'>";
 
-      echo "<tr><td> " . 'calling_code' . "</td><td>" . 'prefix' . "</td><td>" . 'numbers' . "</td></tr>";
+      echo "<tr><td> " . 'Hívott telefonszámok' . "</td><td>" . '' . "</td><td>" . '' . "</td></tr>";
 
       while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "<tr class='tele_rows' id='$result[called_number_id]' name='$result[called_number_id]'><td>" . $result['calling_code'] . "</td><td>" . $result['prefix'] . "</td><td>" . $result['numbers'] . "</td><td><a href='edit.php?called_number_id=$result[called_number_id]'>Módosítás</a></td><td><a href='delete.php?called_number_id=$result[called_number_id]'>Törlés</a></td></tr>";
+        $full_telephone_number = $result['calling_code'] . " " . $result['prefix'] . " " . $result['numbers'];
+        echo "<tr class='tele_rows' id='$result[called_number_id]' name='$result[called_number_id]'><td>" . $full_telephone_number . "</td><td><a href='edit.php?called_number_id=$result[called_number_id]'>Módosítás</a></td><td><a href='delete.php?called_number_id=$result[called_number_id]'>Törlés</a></td></tr>";
       }
 
       echo "</table></div>";

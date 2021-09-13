@@ -15,9 +15,11 @@
       <?php
         echo "<div class='table-container'><table class='table table-striped'>";
 
-        echo "<tr><td>" . 'calling_numbers.calling_code' . "</td><td> " . 'calling_numbers.prefix' . "</td><td>" . 'calling_numbers.numbers' . "</td><td>" . 'incoming_calls.date_time' . "</td><td>" . 'called_numbers.calling_code' . "</td><td>" . 'called_numbers.prefix' . "</td><td>" . 'called_numbers.numbers' . "</td><td>" . 'state' . "</td><td>" . 'notes' . "</td></tr>";
+        echo "<tr><td>" . 'Hívó telefonszám' . "</td><td>" . 'Hívás időpontja' . "</td><td>" . 'Hívott telefonszám' . "</td><td>" . 'Hívás állapota' . "</td><td>" . 'Megjegyzés' . "</td><td>" . '' . "</td><td>" . '' . "</td></tr>";
         while($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-          echo "<tr><td>" . $result['calling_code1'] . "</td><td> " . $result['prefix1'] . "</td><td>" . $result['numbers1'] . "</td><td>" . $result['date_time'] . "</td><td>" . $result['calling_code2'] . "</td><td>" . $result['prefix2'] . "</td><td>" . $result['numbers2'] . "</td><td>" . $result['state'] . "</td><td>" . $result['notes'] . "</td><td><a href='edit.php?call_id=$result[call_id]'>Módosítás</a></td><td><a href='delete.php?call_id=$result[call_id]'>Törlés</a></td></tr>";
+          $calling_full_telephone_number = $result['calling_code1'] . " " . $result['prefix1'] . " " . $result['numbers1'];
+          $called_full_telephone_number = $result['calling_code2'] . " " . $result['prefix2'] . " " . $result['numbers2'];
+          echo "<tr><td>" . $calling_full_telephone_number . "</td><td>" . $result['date_time'] . "</td><td>" .   $called_full_telephone_number . "</td><td>" . $result['state'] . "</td><td>" . $result['notes'] . "</td><td><a href='edit.php?call_id=$result[call_id]'>Módosítás</a></td><td><a href='delete.php?call_id=$result[call_id]'>Törlés</a></td></tr>";
         }
 
         echo "</table></div>";
