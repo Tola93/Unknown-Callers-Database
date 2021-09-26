@@ -34,7 +34,10 @@
             <?php
               while($calling_tele_in_list=$calling_tele_in->fetch(PDO::FETCH_ASSOC)){
             ?>
-                <option value="<?php echo $calling_tele_in_list['numbers']; ?>"><?php echo $calling_tele_in_list['numbers']; ?></option>
+            <option
+              value="<?php echo $calling_tele_in_list['calling_number_id']; ?>">
+              <?php echo $calling_tele_in_list['calling_code'] . " " . $calling_tele_in_list['prefix'] . " " . $calling_tele_in_list['numbers']; ?>
+            </option>
             <?php
               }
             ?>
@@ -47,7 +50,10 @@
               <?php
                 while($called_tele_in_list=$called_tele_in->fetch(PDO::FETCH_ASSOC)){
               ?>
-                  <option value="<?php echo $called_tele_in_list['numbers']; ?>"><?php echo $called_tele_in_list['numbers']; ?></option>
+                  <option
+                    value="<?php echo $called_tele_in_list['called_number_id']; ?>">
+                    <?php echo $called_tele_in_list['calling_code'] . " " . $called_tele_in_list['prefix'] . " " . $called_tele_in_list['numbers']; ?>
+                  </option>
               <?php
                 }
               ?>

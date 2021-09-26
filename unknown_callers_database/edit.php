@@ -175,17 +175,20 @@
             <div>
               Hívó telefonszám :
               <select name="calling_tele_in">
-                <?php $callingTelenumber = $result['numbers1']; ?>
-                <option selected><?php echo $result['numbers1']; ?></option>
+                <?php $callingTelenumber = $result['calling_code1'] . " " . $result['prefix1'] . " " . $result['numbers1']; ?>
+                <option selected value="<?php echo $result['calling_number_id']; ?>"><?php echo $result['calling_code1'] . " " . $result['prefix1'] . " " . $result['numbers1']; ?></option>
                 <?php
-                $sql = "SELECT `numbers` FROM `calling_numbers`";
+                $sql = "SELECT `calling_number_id`,`calling_code`,`prefix`,`numbers` FROM `calling_numbers`";
                 $stmt = $db->prepare($sql);
                 $stmt->execute();
 
                 while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
                 ?>
-                <?php if($callingTelenumber != $row_list['numbers']){ ?>
-                <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
+                <?php if($callingTelenumber != $row_list['calling_code'] . " " . $row_list['prefix'] . " " . $row_list['numbers']){ ?>
+                <option
+                  value="<?php echo $row_list['calling_number_id']; ?>">
+                  <?php echo $row_list['calling_code'] . " " . $row_list['prefix'] . " " . $row_list['numbers']; ?>
+                </option>
                 <?php
                   }
                 }
@@ -196,17 +199,20 @@
             <div>
               Hívó telefonszám :
               <select name="called_tele_in">
-                <?php $calledTelenumber = $result['numbers2']; ?>
-                <option selected><?php echo $result['numbers2']; ?></option>
+                <?php $calledTelenumber = $result['calling_code2'] . " " . $result['prefix2'] . " " . $result['numbers2']; ?>
+                <option selected value="<?php echo $result['called_number_id']; ?>"><?php echo $result['calling_code2'] . " " . $result['prefix2'] . " " . $result['numbers2']; ?></option>
                 <?php
-                $sql = "SELECT `numbers` FROM `called_numbers`";
+                $sql = "SELECT `called_number_id`,`calling_code`,`prefix`,`numbers` FROM `called_numbers`";
                 $stmt = $db->prepare($sql);
                 $stmt->execute();
 
                 while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
                 ?>
-                <?php if($calledTelenumber != $row_list['numbers']){ ?>
-                <option value="<?php echo $row_list['numbers']; ?>"><?php echo $row_list['numbers']; ?></option>
+                <?php if($calledTelenumber != $row_list['calling_code'] . " " . $row_list['prefix'] . " " . $row_list['numbers']){ ?>
+                <option
+                  value="<?php echo $row_list['called_number_id']; ?>">
+                  <?php echo $row_list['calling_code'] . " " . $row_list['prefix'] . " " . $row_list['numbers']; ?>
+                </option>
                 <?php
                   }
                 }
