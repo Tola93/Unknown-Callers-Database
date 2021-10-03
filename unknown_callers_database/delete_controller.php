@@ -10,8 +10,7 @@
 
   if (strpos($_SERVER['REQUEST_URI'], "calling_number_id") !== false) {
 
-
-    $sql = "SELECT * FROM `calling_numbers` WHERE `calling_number_id`=:calling_number_id ORDER BY `numbers`";
+    $sql = "SELECT `calling_number_id`,`calling_code`,`prefix`,`numbers` FROM `calling_numbers` WHERE `calling_number_id`=:calling_number_id ORDER BY `prefix`";
     $stmt = $db->prepare($sql);
     $calling_number_id =  preg_replace("/[^a-zA-Z0-9-]/","",$_GET['calling_number_id']);
     $stmt->bindValue(':calling_number_id', htmlspecialchars($calling_number_id));
@@ -23,7 +22,7 @@
 
   if (strpos($_SERVER['REQUEST_URI'], "called_number_id") !== false) {
 
-    $sql = "SELECT * FROM `called_numbers` WHERE `called_number_id`=:called_number_id ORDER BY `numbers`";
+    $sql = "SELECT `called_number_id`,`calling_code`,`prefix`,`numbers` FROM `called_numbers` WHERE `called_number_id`=:called_number_id ORDER BY `prefix`";
     $stmt = $db->prepare($sql);
     $called_number_id =  preg_replace("/[^a-zA-Z0-9-]/","",$_GET['called_number_id']);
     $stmt->bindValue(':called_number_id', htmlspecialchars($called_number_id));
@@ -38,8 +37,10 @@
     $sql =
     "SELECT
     (incoming_calls.call_id) AS `call_id`,
+    (calling_numbers.calling_number_id) AS `calling_number_id`,
     (calling_numbers.calling_code) AS `calling_code1`, (calling_numbers.prefix) AS `prefix1`, (calling_numbers.numbers) AS `numbers1`,
     (incoming_calls.date_time) AS `date_time`, (incoming_calls.state) AS `state`, (incoming_calls.notes) AS `notes`,
+    (called_numbers.called_number_id) AS `called_number_id`,
     (called_numbers.calling_code) AS `calling_code2`, (called_numbers.prefix) AS `prefix2`, (called_numbers.numbers) AS `numbers2`
     FROM `incoming_calls`
     JOIN `calling_numbers`

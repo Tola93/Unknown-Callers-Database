@@ -113,38 +113,20 @@
               </div>
 
               <div>
-                calling_numbers.calling_code:
-                <input readonly name="calling_code1" type="text" value="<?php echo $result['calling_code1']; ?>">
+                Hívó telefonszám:
+                <?php $callingTelenumber = $result['calling_code1'] . " " . $result['prefix1'] . " " . $result['numbers1']; ?>
+                <input readonly name="calling_tele_in" type="text" value="<?php echo $callingTelenumber; ?>">
               </div>
 
               <div>
-                calling_numbers.prefix:
-                <input readonly name="prefix1" type="text" value="<?php echo $result['prefix1']; ?>">
-              </div>
-
-              <div>
-                calling_numbers.numbers:
-                <input readonly name="numbers1" type="text" value="<?php echo $result['numbers1']; ?>">
-              </div>
-
-              <div>
-                incoming_calls.date_time:
+                Hívás dátuma:
                 <input readonly name="date_time" type="text" value="<?php echo $result['date_time']; ?>">
               </div>
 
               <div>
-                called_numbers.calling_code:
-                <input readonly name="calling_code2" type="text" value="<?php echo $result['calling_code2']; ?>">
-              </div>
-
-              <div>
-                called_numbers.prefix	:
-                <input readonly name="prefix2" type="text" value="<?php echo $result['prefix2']; ?>">
-              </div>
-
-              <div>
-                called_numbers.numbers:
-                <input readonly name="numbers2" type="text" value="<?php echo $result['numbers2']; ?>">
+                Hívott telefonszám:
+                <?php $calledTelenumber = $result['calling_code2'] . " " . $result['prefix2'] . " " . $result['numbers2']; ?>
+                <input readonly name="called_tele_in" type="text" value="<?php echo $calledTelenumber; ?>">
               </div>
 
               <div>
