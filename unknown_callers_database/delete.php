@@ -25,18 +25,9 @@
               </div>
 
               <div>
-                calling_code:
-                <input readonly name="calling_code_in" type="text" value="<?php echo $result['calling_code']; ?>">
-              </div>
-
-              <div>
-                prefix:
-                <input readonly name="prefix_in" type="text" value="<?php echo $result['prefix']; ?>">
-              </div>
-
-              <div>
-                numbers:
-                <input readonly name="numbers_in" type="text" value="<?php echo $result['numbers']; ?>">
+                Hívó telefonszám:
+                <?php $callingTelenumber = $result['calling_code'] . " " . $result['prefix'] . " " . $result['numbers']; ?>
+                <input readonly name="calling_tele_in" type="text" value="<?php echo $callingTelenumber; ?>">
               </div>
 
               <div>
@@ -69,18 +60,9 @@
               </div>
 
               <div>
-                calling_code:
-                <input readonly name="calling_code_in" type="text" value="<?php echo $result['calling_code']; ?>">
-              </div>
-
-              <div>
-                prefix:
-                <input readonly name="prefix_in" type="text" value="<?php echo $result['prefix']; ?>">
-              </div>
-
-              <div>
-                numbers:
-                <input readonly name="numbers_in" type="text" value="<?php echo $result['numbers']; ?>">
+                Hívott telefonszám:
+                <?php $calledTelenumber = $result['calling_code'] . " " . $result['prefix'] . " " . $result['numbers']; ?>
+                <input readonly name="called_tele_in" type="text" value="<?php echo $calledTelenumber; ?>">
               </div>
 
               <div>

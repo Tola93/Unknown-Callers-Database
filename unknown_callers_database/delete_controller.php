@@ -59,9 +59,6 @@
 
   if (isset($_POST['removeIncomingTelephoneNumber'])) {
     $calling_number_id = !empty($_POST['calling_number_id']) ? trim($_POST['calling_number_id']) : null;
-    $calling_code = !empty($_POST['calling_code_in']) ? trim($_POST['calling_code_in']) : null;
-    $prefix = !empty($_POST['prefix_in']) ? trim($_POST['prefix_in']) : null;
-    $numbers = !empty($_POST['numbers_in']) ? trim($_POST['numbers_in']) : null;
 
     if (count($errors) == 0) {
       $sql = "DELETE FROM `calling_numbers` WHERE `calling_number_id`=:calling_number_id";
@@ -74,9 +71,6 @@
 
   if (isset($_POST['removeUserTelephoneNumber'])) {
     $called_number_id = !empty($_POST['called_number_id']) ? trim($_POST['called_number_id']) : null;
-    $calling_code = !empty($_POST['calling_code_in']) ? trim($_POST['calling_code_in']) : null;
-    $prefix = !empty($_POST['prefix_in']) ? trim($_POST['prefix_in']) : null;
-    $numbers = !empty($_POST['numbers_in']) ? trim($_POST['numbers_in']) : null;
 
     if (count($errors) == 0) {
       $sql = "DELETE FROM `called_numbers` WHERE `called_number_id`=:called_number_id";
