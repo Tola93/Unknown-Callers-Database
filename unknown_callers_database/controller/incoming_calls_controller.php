@@ -1,6 +1,6 @@
 <?php
 
-  include("database_connection.php");
+  include("./../model/database_connection.php");
 
   $errors = array();
 
@@ -51,10 +51,10 @@
       $stmt->bindParam(4, $call_state_in);
       $stmt->bindParam(5, $notes_in);
       $stmt->execute();
-      header('Location: incoming_calls.php');
+      header('Location: ./../view/incoming_calls.php');
       exit;
     }
-    header('Location: incoming_calls.php');
+    header('Location: ./../view/incoming_calls.php');
     exit;
   }
 

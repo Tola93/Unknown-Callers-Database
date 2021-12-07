@@ -9,7 +9,7 @@
   <div class="container">
     <?php
       include 'navbar.php';
-      include 'incoming_calls_controller.php';
+      include './../controller/incoming_calls_controller.php';
     ?>
     <div>
       <?php

@@ -1,6 +1,6 @@
 <?php
 
-  include("database_connection.php");
+  include("./../model/database_connection.php");
 
   $errors = array();
 
@@ -57,40 +57,63 @@
 
   }
 
-  if (isset($_POST['removeIncomingTelephoneNumber'])) {
+  if (isset($_POST['modifyIncomingTelephoneNumber'])) {
     $calling_number_id = !empty($_POST['calling_number_id']) ? trim($_POST['calling_number_id']) : null;
+    $calling_code = !empty($_POST['calling_code_in']) ? trim($_POST['calling_code_in']) : null;
+    $prefix = !empty($_POST['prefix_in']) ? trim($_POST['prefix_in']) : null;
+    $numbers = !empty($_POST['numbers_in']) ? trim($_POST['numbers_in']) : null;
 
     if (count($errors) == 0) {
-      $sql = "DELETE FROM `calling_numbers` WHERE `calling_number_id`=:calling_number_id";
+      $sql = "UPDATE `calling_numbers` SET `calling_code`=:calling_code, `prefix`=:prefix, `numbers`=:numbers WHERE `calling_number_id`=:calling_number_id";
       $stmt = $db->prepare($sql);
       $stmt->bindValue(':calling_number_id', $calling_number_id);
+      $stmt->bindValue(':calling_code', $calling_code);
+      $stmt->bindValue(':prefix', $prefix);
+      $stmt->bindValue(':numbers', $numbers);
       $result = $stmt->execute();
     }
-        header('Location: calling_numbers.php');
+    header('Location: ./../view/calling_numbers.php');
   }
 
-  if (isset($_POST['removeUserTelephoneNumber'])) {
+  if (isset($_POST['modifyUserTelephoneNumber'])) {
     $called_number_id = !empty($_POST['called_number_id']) ? trim($_POST['called_number_id']) : null;
+    $calling_code = !empty($_POST['calling_code_in']) ? trim($_POST['calling_code_in']) : null;
+    $prefix = !empty($_POST['prefix_in']) ? trim($_POST['prefix_in']) : null;
+    $numbers = !empty($_POST['numbers_in']) ? trim($_POST['numbers_in']) : null;
 
     if (count($errors) == 0) {
-      $sql = "DELETE FROM `called_numbers` WHERE `called_number_id`=:called_number_id";
+      $sql = "UPDATE `called_numbers` SET `calling_code`=:calling_code, `prefix`=:prefix, `numbers`=:numbers WHERE `called_number_id`=:called_number_id";
       $stmt = $db->prepare($sql);
       $stmt->bindValue(':called_number_id', $called_number_id);
+      $stmt->bindValue(':calling_code', $calling_code);
+      $stmt->bindValue(':prefix', $prefix);
+      $stmt->bindValue(':numbers', $numbers);
       $result = $stmt->execute();
     }
-    header('Location: called_numbers.php');
+    header('Location: ./../view/called_numbers.php');
   }
 
-  if (isset($_POST['removeIncomingCall'])) {
+  if (isset($_POST['modifyIncomingCall'])) {
     $call_id = !empty($_POST['call_id']) ? trim($_POST['call_id']) : null;
+    $calling_number_id = !empty($_POST['calling_tele_in']) ? trim($_POST['calling_tele_in']) : null;
+    $called_number_id = !empty($_POST['called_tele_in']) ? trim($_POST['called_tele_in']) : null;
+    $call_date = !empty($_POST['call_date_in']) ? trim($_POST['call_date_in']) : null;
+    $call_state = !empty($_POST['call_state_in']) ? trim($_POST['call_state_in']) : null;
+    $notes = !empty($_POST['notes_in']) ? trim($_POST['notes_in']) : null;
 
     if (count($errors) == 0) {
-      $sql = "DELETE FROM `incoming_calls` WHERE `call_id`=:call_id";
+
+      $sql = "UPDATE `incoming_calls` SET `calling_number_id`=:calling_number_id, `called_number_id`=:called_number_id, `date_time`=:date_time, `state`=:state, `notes`=:notes WHERE `call_id`=:call_id";
       $stmt = $db->prepare($sql);
       $stmt->bindValue(':call_id', $call_id);
-      $result = $stmt->execute();
+      $stmt->bindValue(':calling_number_id', $calling_number_id);
+      $stmt->bindValue(':called_number_id', $called_number_id);
+      $stmt->bindValue(':date_time', $call_date);
+      $stmt->bindValue(':state', $call_state);
+      $stmt->bindValue(':notes', $notes);
+      $stmt->execute();
     }
-    header('Location: incoming_calls.php');
+    header('Location: ./../view/incoming_calls.php');
   }
 
 ?>

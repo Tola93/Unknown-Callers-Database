@@ -9,7 +9,7 @@
   <div class="container">
     <?php
       include 'navbar.php';
-      include 'called_numbers_controller.php';
+      include './../controller/called_numbers_controller.php';
     ?>
     <?php
       echo "<div class='table-container'><table class='table table-striped'>";

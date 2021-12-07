@@ -1,10 +1,10 @@
 <?php
 
-  include("database_connection.php");
+  include("./../model/database_connection.php");
 
   $errors = array();
 
-  $sql = "SELECT * FROM `calling_numbers` ORDER BY `numbers`";
+  $sql = "SELECT * FROM `called_numbers` ORDER BY `numbers`";
   $stmt = $db->prepare($sql);
   $stmt->execute();
 
@@ -26,7 +26,7 @@
     if (empty($prefix)) { array_push($errors, "prefix hiba"); }
     if (empty($numbers)) { array_push($errors, "numbers hiba"); }
 
-    $sql = "SELECT * FROM `calling_numbers` WHERE `calling_code`=:calling_code AND `prefix`=:prefix AND `numbers`=:numbers";
+    $sql = "SELECT * FROM `called_numbers` WHERE `calling_code`=:calling_code AND `prefix`=:prefix AND `numbers`=:numbers";
     $stmt = $db->prepare($sql);
     $stmt->bindValue(':calling_code', $calling_code);
     $stmt->bindValue(':prefix', $prefix);
@@ -40,16 +40,16 @@
 
     if (count($errors) == 0) {
 
-      $sql = "INSERT INTO `calling_numbers` (`calling_code`, `prefix`, `numbers`) VALUES (?, ?, ?);";
+      $sql = "INSERT INTO `called_numbers` (`calling_code`, `prefix`, `numbers`) VALUES (?, ?, ?);";
       $stmt = $db->prepare($sql);
       $stmt->bindParam(1, $calling_code);
       $stmt->bindParam(2, $prefix);
       $stmt->bindParam(3, $numbers);
       $result = $stmt->execute();
-      header('Location: calling_numbers.php');
+      header('Location: ./../view/called_numbers.php');
       exit;
     }
-    header('Location: calling_numbers.php');
+    header('Location: ./../view/called_numbers.php');
     exit;
   }
 

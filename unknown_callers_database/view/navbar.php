@@ -16,7 +16,7 @@
       </ul>
   </div>
   <div class="mx-auto order-0">
-      <a class="navbar-brand mx-auto" href="index.php"><img src="mobile-phone-icon-1.png" width="50" height="50"></a>
+      <a class="navbar-brand mx-auto" href="index.php"><img src="./../resources/images/mobile-phone-icon-1.png" width="50" height="50"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
           <span class="navbar-toggler-icon"></span>
       </button>
