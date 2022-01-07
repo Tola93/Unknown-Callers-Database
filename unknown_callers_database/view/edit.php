@@ -2,14 +2,20 @@
 <html lang="en">
 
 <head>
-  <?php require 'head.php'; ?>
+  <?php require 'containers/head.php'; ?>
 </head>
 
 <body>
   <div class="container">
     <?php
-      include 'navbar.php';
+      include './containers/navbar.php';
       include './../controller/edit_controller.php';
+
+      if (!empty($_SESSION['is_logged_in'])) {
+        $user_id = $_SESSION['user_id'];
+      } else {
+        $user_id = 0;
+      }
     ?>
 
     <div>
@@ -178,8 +184,9 @@
                 <?php $callingTelenumber = $result['calling_code1'] . " " . $result['prefix1'] . " " . $result['numbers1']; ?>
                 <option selected value="<?php echo $result['calling_number_id']; ?>"><?php echo $result['calling_code1'] . " " . $result['prefix1'] . " " . $result['numbers1']; ?></option>
                 <?php
-                $sql = "SELECT `calling_number_id`,`calling_code`,`prefix`,`numbers` FROM `calling_numbers`";
+                $sql = "SELECT `calling_number_id`,`calling_code`,`prefix`,`numbers` FROM `calling_numbers` WHERE `user_id`=:user_id";
                 $stmt = $db->prepare($sql);
+                $stmt->bindValue(':user_id', $user_id);
                 $stmt->execute();
 
                 while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){
@@ -197,13 +204,14 @@
             </div>
 
             <div>
-              Hívó telefonszám :
+              Hívott telefonszám :
               <select name="called_tele_in">
                 <?php $calledTelenumber = $result['calling_code2'] . " " . $result['prefix2'] . " " . $result['numbers2']; ?>
                 <option selected value="<?php echo $result['called_number_id']; ?>"><?php echo $result['calling_code2'] . " " . $result['prefix2'] . " " . $result['numbers2']; ?></option>
                 <?php
-                $sql = "SELECT `called_number_id`,`calling_code`,`prefix`,`numbers` FROM `called_numbers`";
+                $sql = "SELECT `called_number_id`,`calling_code`,`prefix`,`numbers` FROM `called_numbers` WHERE `user_id`=:user_id";
                 $stmt = $db->prepare($sql);
+                $stmt->bindValue(':user_id', $user_id);
                 $stmt->execute();
 
                 while($row_list=$stmt->fetch(PDO::FETCH_ASSOC)){

@@ -2,15 +2,16 @@
 <html lang="en">
 
 <head>
-  <?php require 'head.php'; ?>
+  <?php require 'containers/head.php'; ?>
 </head>
 
 <body>
   <div class="container">
-    <?php
-      include 'navbar.php';
-      include './../controller/called_numbers_controller.php';
-    ?>
+  <?php
+    include './containers/navbar.php';
+    include './../controller/called_numbers_controller.php';
+  ?>
+  <?php if (!empty($_SESSION['is_logged_in'])): ?>
     <?php
       echo "<div class='table-container'><table class='table table-striped'>";
 
@@ -64,6 +65,7 @@
       </div>
 
     </form>
+  <?php endif; ?>
   </div>
 </body>
 </html>

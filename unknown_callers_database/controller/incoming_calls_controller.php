@@ -4,6 +4,12 @@
 
   $errors = array();
 
+  if (!empty($_SESSION['is_logged_in'])) {
+    $user_id = $_SESSION['user_id'];
+  } else {
+    $user_id = 0;
+  }
+
   $sql =
   "SELECT
   (incoming_calls.call_id) AS `call_id`,
@@ -16,16 +22,20 @@
   JOIN `calling_numbers`
   ON (incoming_calls.calling_number_id = calling_numbers.calling_number_id)
   JOIN `called_numbers`
-  ON (incoming_calls.called_number_id = called_numbers.called_number_id)";
+  ON (incoming_calls.called_number_id = called_numbers.called_number_id)
+  WHERE (incoming_calls.user_id)=:user_id";
   $stmt = $db->prepare($sql);
+  $stmt->bindValue(':user_id', $user_id);
   $stmt->execute();
 
-  $sql = "SELECT `calling_number_id`,`calling_code`,`prefix`,`numbers` FROM `calling_numbers` ORDER BY `prefix`";
+  $sql = "SELECT `calling_number_id`,`calling_code`,`prefix`,`numbers` FROM `calling_numbers` WHERE `user_id`=:user_id ORDER BY `prefix`";
   $calling_tele_in = $db->prepare($sql);
+  $calling_tele_in->bindValue(':user_id', $user_id);
   $calling_tele_in->execute();
 
-  $sql = "SELECT `called_number_id`,`calling_code`,`prefix`,`numbers` FROM `called_numbers` ORDER BY `prefix`";
+  $sql = "SELECT `called_number_id`,`calling_code`,`prefix`,`numbers` FROM `called_numbers` WHERE `user_id`=:user_id ORDER BY `prefix`";
   $called_tele_in = $db->prepare($sql);
+  $called_tele_in->bindValue(':user_id', $user_id);
   $called_tele_in->execute();
 
   if (isset($_POST['save_call'])) {
@@ -43,13 +53,14 @@
 
     if (count($errors) == 0) {
 
-      $sql = "INSERT INTO `incoming_calls` (`calling_number_id`, `called_number_id`, `date_time`, `state`, `notes`) VALUES (?, ?, ?, ?, ?)";
+      $sql = "INSERT INTO `incoming_calls` (`calling_number_id`, `called_number_id`, `date_time`, `state`, `notes`, `user_id`) VALUES (?, ?, ?, ?, ?, ?)";
       $stmt = $db->prepare($sql);
       $stmt->bindParam(1, $calling_number_id);
       $stmt->bindParam(2, $called_number_id);
       $stmt->bindParam(3, $call_date_in);
       $stmt->bindParam(4, $call_state_in);
       $stmt->bindParam(5, $notes_in);
+      $stmt->bindParam(6, $user_id);
       $stmt->execute();
       header('Location: ./../view/incoming_calls.php');
       exit;

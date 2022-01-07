@@ -2,14 +2,20 @@
 <html lang="en">
 
 <head>
-  <?php require 'head.php'; ?>
+  <?php require 'containers/head.php'; ?>
 </head>
 
 <body>
   <div class="container">
     <?php
-      include 'navbar.php';
+      include './containers/navbar.php';
       include './../controller/delete_controller.php';
+
+      if (!empty($_SESSION['is_logged_in'])) {
+        $user_id = $_SESSION['user_id'];
+      } else {
+        $user_id = 0;
+      }
     ?>
 
     <div>

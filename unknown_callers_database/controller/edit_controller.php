@@ -8,12 +8,19 @@
   $isUserTelephone=False;
   $isCall=False;
 
+  if (!empty($_SESSION['is_logged_in'])) {
+    $user_id = $_SESSION['user_id'];
+  } else {
+    $user_id = 0;
+  }
+
   if (strpos($_SERVER['REQUEST_URI'], "calling_number_id") !== false) {
 
-    $sql = "SELECT `calling_number_id`,`calling_code`,`prefix`,`numbers` FROM `calling_numbers` WHERE `calling_number_id`=:calling_number_id ORDER BY `prefix`";
+    $sql = "SELECT `calling_number_id`,`calling_code`,`prefix`,`numbers` FROM `calling_numbers` WHERE `calling_number_id`=:calling_number_id AND `user_id`=:user_id ORDER BY `prefix`";
     $stmt = $db->prepare($sql);
     $calling_number_id =  preg_replace("/[^a-zA-Z0-9-]/","",$_GET['calling_number_id']);
     $stmt->bindValue(':calling_number_id', htmlspecialchars($calling_number_id));
+    $stmt->bindValue(':user_id', $user_id);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $isIncomingCaller=True;
@@ -22,10 +29,11 @@
 
   if (strpos($_SERVER['REQUEST_URI'], "called_number_id") !== false) {
 
-    $sql = "SELECT `called_number_id`,`calling_code`,`prefix`,`numbers` FROM `called_numbers` WHERE `called_number_id`=:called_number_id ORDER BY `prefix`";
+    $sql = "SELECT `called_number_id`,`calling_code`,`prefix`,`numbers` FROM `called_numbers` WHERE `called_number_id`=:called_number_id AND `user_id`=:user_id ORDER BY `prefix`";
     $stmt = $db->prepare($sql);
     $called_number_id =  preg_replace("/[^a-zA-Z0-9-]/","",$_GET['called_number_id']);
     $stmt->bindValue(':called_number_id', htmlspecialchars($called_number_id));
+    $stmt->bindValue(':user_id', $user_id);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $isUserTelephone=True;
@@ -47,10 +55,12 @@
     ON (incoming_calls.calling_number_id = calling_numbers.calling_number_id)
     JOIN `called_numbers`
     ON (incoming_calls.called_number_id = called_numbers.called_number_id)
-    WHERE `call_id`=:call_id";
+    WHERE `call_id`=:call_id
+    AND (incoming_calls.user_id)=:user_id";
     $stmt = $db->prepare($sql);
     $call_id =  preg_replace("/[^a-zA-Z0-9-]/","",$_GET['call_id']);
     $stmt->bindValue(':call_id', htmlspecialchars($call_id));
+    $stmt->bindValue(':user_id', $user_id);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $isCall=True;
@@ -64,12 +74,13 @@
     $numbers = !empty($_POST['numbers_in']) ? trim($_POST['numbers_in']) : null;
 
     if (count($errors) == 0) {
-      $sql = "UPDATE `calling_numbers` SET `calling_code`=:calling_code, `prefix`=:prefix, `numbers`=:numbers WHERE `calling_number_id`=:calling_number_id";
+      $sql = "UPDATE `calling_numbers` SET `calling_code`=:calling_code, `prefix`=:prefix, `numbers`=:numbers WHERE `calling_number_id`=:calling_number_id AND `user_id`=:user_id";
       $stmt = $db->prepare($sql);
       $stmt->bindValue(':calling_number_id', $calling_number_id);
       $stmt->bindValue(':calling_code', $calling_code);
       $stmt->bindValue(':prefix', $prefix);
       $stmt->bindValue(':numbers', $numbers);
+      $stmt->bindValue(':user_id', $user_id);
       $result = $stmt->execute();
     }
     header('Location: ./../view/calling_numbers.php');
@@ -82,12 +93,13 @@
     $numbers = !empty($_POST['numbers_in']) ? trim($_POST['numbers_in']) : null;
 
     if (count($errors) == 0) {
-      $sql = "UPDATE `called_numbers` SET `calling_code`=:calling_code, `prefix`=:prefix, `numbers`=:numbers WHERE `called_number_id`=:called_number_id";
+      $sql = "UPDATE `called_numbers` SET `calling_code`=:calling_code, `prefix`=:prefix, `numbers`=:numbers WHERE `called_number_id`=:called_number_id AND `user_id`=:user_id";
       $stmt = $db->prepare($sql);
       $stmt->bindValue(':called_number_id', $called_number_id);
       $stmt->bindValue(':calling_code', $calling_code);
       $stmt->bindValue(':prefix', $prefix);
       $stmt->bindValue(':numbers', $numbers);
+      $stmt->bindValue(':user_id', $user_id);
       $result = $stmt->execute();
     }
     header('Location: ./../view/called_numbers.php');
@@ -103,7 +115,7 @@
 
     if (count($errors) == 0) {
 
-      $sql = "UPDATE `incoming_calls` SET `calling_number_id`=:calling_number_id, `called_number_id`=:called_number_id, `date_time`=:date_time, `state`=:state, `notes`=:notes WHERE `call_id`=:call_id";
+      $sql = "UPDATE `incoming_calls` SET `calling_number_id`=:calling_number_id, `called_number_id`=:called_number_id, `date_time`=:date_time, `state`=:state, `notes`=:notes WHERE `call_id`=:call_id AND `user_id`=:user_id";
       $stmt = $db->prepare($sql);
       $stmt->bindValue(':call_id', $call_id);
       $stmt->bindValue(':calling_number_id', $calling_number_id);
@@ -111,6 +123,7 @@
       $stmt->bindValue(':date_time', $call_date);
       $stmt->bindValue(':state', $call_state);
       $stmt->bindValue(':notes', $notes);
+      $stmt->bindValue(':user_id', $user_id);
       $stmt->execute();
     }
     header('Location: ./../view/incoming_calls.php');
