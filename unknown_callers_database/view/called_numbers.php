@@ -66,6 +66,9 @@
 
     </form>
   <?php endif; ?>
+  <?php
+    include './containers/footer.php';
+  ?>
   </div>
 </body>
 </html>

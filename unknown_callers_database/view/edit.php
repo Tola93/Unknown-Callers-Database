@@ -283,7 +283,9 @@
         </div>
       <?php endif; ?>
     </div>
-
+    <?php
+      include './containers/footer.php';
+    ?>
   </div>
 </body>
 </html>

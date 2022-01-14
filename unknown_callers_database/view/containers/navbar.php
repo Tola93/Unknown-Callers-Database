@@ -37,7 +37,7 @@
           if(isset($_SESSION['is_logged_in']) == "logged_in") {
             echo '<li class="nav-item mx-2  mt-1"><a href="./../controller/sign_out_controller.php" class="nav-link">Kijelentkezés</a></li>';
           } else {
-            echo '<li class="nav-item mx-2  mt-1"><a href="index.php" class="nav-link">Bejelentkezés</a></li>';
+            echo '<li class="nav-item mx-2  mt-1"><a href="sign_in.php" class="nav-link">Bejelentkezés</a></li>';
           }
           ?>
       </ul>

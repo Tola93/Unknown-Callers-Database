@@ -20,7 +20,7 @@ $msg1 = "";
 				$_SESSION['name'] = $row['name'];
 				$_SESSION['permission'] = $row['permission'];
 				$msg1 = "Sikeres bejelentkezés!";
-				header("location: incoming_calls.php");
+				header("location: user.php");
 			} else {
 				$msg1 = "Hibás név vagy jelszó!";
 			}

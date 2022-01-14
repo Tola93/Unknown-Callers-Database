@@ -90,7 +90,10 @@
         </div>
       </form>
     </div>
-  </div>
   <?php endif; ?>
+  <?php
+    include './containers/footer.php';
+  ?>
+  </div>
 </body>
 </html>
