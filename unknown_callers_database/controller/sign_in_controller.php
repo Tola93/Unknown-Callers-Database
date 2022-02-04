@@ -1,10 +1,14 @@
 <?php
+
 include("./../model/database_connection.php");
+include("./../view/errors.php");
 
 $msg1 = "";
 	if(isset($_POST['submitBtnLogin'])) {
+
 		$username = trim($_POST['username']);
 		$password = trim($_POST['password']);
+
 	if($username != "" && $password != "") {
 		try {
 			$query = "SELECT * FROM `users` WHERE `name`=:name AND `password`=:password";
@@ -30,5 +34,5 @@ $msg1 = "";
 	} else {
 		$msg1 = "Név és jelszó kell!";
 	}
-}
+	}
 ?>

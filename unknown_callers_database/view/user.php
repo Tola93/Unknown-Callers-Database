@@ -12,7 +12,7 @@
     ?>
   <?php
   if(isset($_SESSION['user_id']) && $_SESSION['name'] != "") {
-    echo '<h1>Sikeres bejelentkezés!. Üdvözlünk '.$_SESSION['name'].'!</h1>';
+    echo '<h1>Sikeres bejelentkezés! Üdvözlünk '.$_SESSION['name'].'!</h1>';
   } else {
     echo '<h1>Nem vagy bejelentkezve!</h1>';
   }

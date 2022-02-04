@@ -16,14 +16,14 @@
       <div id="registrationHeader">
          <div id="registrationTitle">Regisztráció</div><br>
          <div id="registrationArea">
-            <form method="post" action="registration"> <!-- Form, action PHP-hoz fog kelleni -->
+            <form method="post" action=""> <!-- Form, action PHP-hoz fog kelleni -->
               <?php //include('registration_controller.php'); ?>
               <div id="input-group"><label>Felhasználónév: </label><br>
-                <input type="text" name="username"></div><br>
+                <input type="text" name="reg_username" id="reg_username" value="" autocomplete="off" /></div><br>
               <div id="input-group"><label>Jelszó: </label><br>
-                <input type="password" name="password" id="password" value="" autocomplete="off" /></div><br>
-              <div id="signInText"><label>Jelszó megerősítése: </label><br>
-                <input type="passwordAgain" name="passwordAgain" id="passwordAgain" value="" autocomplete="off" /></div><br>
+                <input type="password" name="reg_password" id="reg_password" value="" autocomplete="off" /></div><br>
+              <!--<div id="signInText"><label>Jelszó megerősítése: </label><br>
+                <input type="passwordAgain" name="passwordAgain" id="passwordAgain" value="" autocomplete="off" /></div><br>-->
               <div id="input-group"><button type="submit" name="reg_user">Regisztráció</button></div><br>
                <input type="button" onclick="window.location.href='sign_in.php'" value='Vissza' />
             </form>

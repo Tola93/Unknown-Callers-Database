@@ -1,8 +1,7 @@
 <?php
 
   include("./../model/database_connection.php");
-
-  $errors = array();
+  include("./../view/errors.php");
 
   if (!empty($_SESSION['is_logged_in'])) {
     $user_id = $_SESSION['user_id'];

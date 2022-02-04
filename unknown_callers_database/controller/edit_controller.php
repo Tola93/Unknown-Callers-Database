@@ -1,8 +1,7 @@
 <?php
 
   include("./../model/database_connection.php");
-
-  $errors = array();
+  include("./../view/errors.php");
 
   $isIncomingCaller=False;
   $isUserTelephone=False;
